@@ -2,6 +2,7 @@
     "cSpell.ignoreWords": [
         "Cloudinary",
         "maxlength",
-        "skus"
+        "skus",
+        "uuid"
     ]
 }

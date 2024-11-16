@@ -6,6 +6,8 @@ const dataFeedRoutes = require('./routes/dataFeedRoutes');
 const imageUploadRoutes = require('./routes/imageUploadRoutes');
 const productRoutes = require('./routes/productRoutes');
 const skuRoutes = require('./routes/skuRoutes');
+const feedRoutes = require('./routes/feedRoutes');
+const inventoryRoutes = require('./routes/InventoryRoutes');
 
 const express = require('express');
 const dotenv = require('dotenv');
@@ -30,12 +32,14 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // Mount routes
-// app.use('/api/v1/auth', authRoutes);
-// app.use('/api/v1/catalogues', catalogueRoutes);
-// app.use('/api/v1/data-feeds', dataFeedRoutes);
-// app.use('/api/v1/images', imageUploadRoutes);
-// app.use('/api/v1/products', productRoutes);
-// app.use('/api/v1/skus', skuRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/catalogues', catalogueRoutes);
+app.use('/api/v1/data-feeds', dataFeedRoutes);
+app.use('/api/v1/images', imageUploadRoutes);
+app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/skus', skuRoutes);
+app.use('/api/v1/feeds', feedRoutes);
+app.use('/api/v1/inventory', inventoryRoutes);
 // Catch-all for undefined routes
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
