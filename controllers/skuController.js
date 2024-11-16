@@ -2,76 +2,51 @@
     const catchAsync = require('../utils/catchAsync');
     const AppError = require('../utils/appError');
 
-    // Get all SKUs
-    exports.getAllSkus = catchAsync(async (req, res, next) => {
-    const skus = await SKU.find();
-
+// Fetch SKU pricing tiers and structure
+exports.getPricing = catchAsync(async (req, res, next) => {
+    const pricing = await SKU.find({}, 'sku price tiers');
     res.status(200).json({
         status: 'success',
-        results: skus.length,
-        data: {
-        skus
-        }
+        data: { pricing },
     });
+});
+
+// Calculate dynamic pricing based on SKU count
+exports.calculatePricing = catchAsync(async (req, res, next) => {
+    const { sku, quantity } = req.body;
+    const skuData = await SKU.findOne({ sku });
+
+    if (!skuData) {
+        return next(new AppError('No SKU found with that ID', 404));
+    }
+
+    const dynamicPrice = skuData.calculatePrice(quantity); // Assume method exists on SKU model
+    res.status(200).json({
+        status: 'success',
+        data: { sku, dynamicPrice },
     });
+});
 
-    // Get a specific SKU by ID
-    exports.getSkuById = catchAsync(async (req, res, next) => {
-    const sku = await SKU.findById(req.params.id);
+// Retrieve current inventory status of all SKUs
+exports.getInventory = catchAsync(async (req, res, next) => {
+    const inventory = await SKU.find({}, 'sku stock status');
+    res.status(200).json({
+        status: 'success',
+        data: { inventory },
+    });
+});
 
-    if (!sku) {
+// Update SKU inventory details
+exports.updateInventory = catchAsync(async (req, res, next) => {
+    const { sku, newStock } = req.body;
+    const skuData = await SKU.findOneAndUpdate({ sku }, { stock: newStock }, { new: true });
+
+    if (!skuData) {
         return next(new AppError('No SKU found with that ID', 404));
     }
 
     res.status(200).json({
         status: 'success',
-        data: {
-        sku
-        }
+        data: { sku: skuData },
     });
-    });
-
-    // Create a new SKU
-    exports.createSku = catchAsync(async (req, res, next) => {
-    const newSku = await SKU.create(req.body);
-
-    res.status(201).json({
-        status: 'success',
-        data: {
-        sku: newSku
-        }
-    });
-    });
-
-    // Update an existing SKU
-    exports.updateSku = catchAsync(async (req, res, next) => {
-    const sku = await SKU.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-    });
-
-    if (!sku) {
-        return next(new AppError('No SKU found with that ID', 404));
-    }
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-        sku
-        }
-    });
-    });
-
-    // Delete an SKU
-    exports.deleteSku = catchAsync(async (req, res, next) => {
-    const sku = await SKU.findByIdAndDelete(req.params.id);
-
-    if (!sku) {
-        return next(new AppError('No SKU found with that ID', 404));
-    }
-
-    res.status(204).json({
-        status: 'success',
-        data: null
-    });
-    });
+});

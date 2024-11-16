@@ -30,12 +30,12 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // Mount routes
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/catalogues', catalogueRoutes);
-app.use('/api/v1/data-feeds', dataFeedRoutes);
-app.use('/api/v1/images', imageUploadRoutes);
-app.use('/api/v1/products', productRoutes);
-app.use('/api/v1/skus', skuRoutes);
+// app.use('/api/v1/auth', authRoutes);
+// app.use('/api/v1/catalogues', catalogueRoutes);
+// app.use('/api/v1/data-feeds', dataFeedRoutes);
+// app.use('/api/v1/images', imageUploadRoutes);
+// app.use('/api/v1/products', productRoutes);
+// app.use('/api/v1/skus', skuRoutes);
 // Catch-all for undefined routes
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

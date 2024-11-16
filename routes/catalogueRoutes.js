@@ -15,7 +15,6 @@ router
 
 router
   .route('/:id')
-  .get(catalogueController.getCatalogById)
   .patch(
     authController.protect,
     authController.restrictTo('admin'),
