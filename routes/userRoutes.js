@@ -1,15 +1,16 @@
     const userController = require('../controllers/userControllers');
     const authController = require('../controllers/authController');
+    const express = require('express');
     const router = express.Router();
 
     router
     .route('/')
     .get(userController.getAllUsers)
-    .post(
-        authController.protect,
-        authController.restrictTo('admin'),
-        userController.createCatalog
-    );
+    // .post(
+    //     authController.protect,
+    //     authController.restrictTo('admin'),
+    //     userController.createCatalog
+    // );
 
     router
     .route('/:id')

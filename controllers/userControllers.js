@@ -1,4 +1,4 @@
-    const User = require('../Model/User');
+    const User = require('../Model/userModel');
     const catchAsync = require('../utils/catchAsync');
     const AppError = require('../utils/appError');
     // Get all users

@@ -8,7 +8,8 @@ const productRoutes = require('./routes/productRoutes');
 const skuRoutes = require('./routes/skuRoutes');
 const feedRoutes = require('./routes/feedRoutes');
 const inventoryRoutes = require('./routes/InventoryRoutes');
-
+const userRoutes=require('./routes/userRoutes')
+const AppError=require('./utils/appError')
 const express = require('express');
 const dotenv = require('dotenv');
 // dotenv.config(); // Load environment variables from .env
@@ -40,6 +41,7 @@ app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/skus', skuRoutes);
 app.use('/api/v1/feeds', feedRoutes);
 app.use('/api/v1/inventory', inventoryRoutes);
+app.use('/api/v1/users',userRoutes)
 // Catch-all for undefined routes
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
