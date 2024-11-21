@@ -50,16 +50,12 @@
         if (!user) {
         return next(new AppError('No user found with that email', 404));
         }
-    
         // Generate OTP
         const otp = crypto.randomBytes(3).toString('hex'); // Generates a 6-digit hex string
-    
         // Set OTP and its expiration time
         user.passwordResetOTP = otp;
         user.passwordResetOTPExpires = Date.now() + 15 * 60 * 1000; // OTP valid for 15 minutes
-    
         await user.save({ validateBeforeSave: false });
-    
         // Send OTP to the user
         const message = `Your OTP for password reset is: ${otp}. It is valid for 15 minutes.`;
         await sendEmail({
@@ -67,13 +63,11 @@
         subject: 'Password Reset OTP',
         message: message,
         });
-    
         res.status(200).json({
         status: 'success',
         message: 'OTP sent to email',
         });
     });
-    
     // @desc reset password
     exports.resetPassword = catchAsync(async (req, res, next) => {
         const { otp, newPassword } = req.body;
@@ -81,19 +75,15 @@
         passwordResetOTP: otp,
         passwordResetOTPExpires: { $gt: Date.now() },
         });
-    
         if (!user) {
         return next(new AppError('Invalid or expired OTP', 400));
         }
-    
         // Update the user's password and confirmPassword for validation purposes
         user.password = newPassword;
         user.confirmPassword = newPassword;
-    
         // Clear the OTP and its expiration time from the user's record
         user.passwordResetOTP = undefined;
         user.passwordResetOTPExpires = undefined;
-    
         res.status(200).json({
         status: 'success',
         message: 'Password updated successfully',
@@ -109,7 +99,6 @@
         ) {
         token = req.headers.authorization.split(' ')[1];
         }
-    
         if (!token) {
         return next(
             new AppError('You are not logged in! Please log in to get access', 401)
@@ -153,7 +142,6 @@
         const user = await User.findById(req.user.id);
         res.json(user);
     });
-    
     // Update logged-in user's profile
     exports.updateMe = catchAsync(async (req, res, next) => {
         const { name, email } = req.body;
